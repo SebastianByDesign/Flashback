@@ -1,4 +1,6 @@
-Roku FlashBack App.
+![Jonathan Teves](images/logo.png)
+## Roku FlashBack App.
+
 This is CMS streaming project
 
 Getting Started
