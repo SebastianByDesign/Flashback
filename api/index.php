@@ -4,9 +4,9 @@
     if(isset($_GET['filter'])){
         $args = array(
             'tbl'=>'tbl_movies',
-            'tbl2'=>'tbl_genre',
+            'tbl2'=>'tbl_genres',
             'tbl3'=>'tbl_mov_genre',
-            'col'=>'movies_id',
+            'col'=>'movie_id',
             'col2'=>'genre_id',
             'col3'=>'genre_name',
             'filter'=>$_GET['filter']
