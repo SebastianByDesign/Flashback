@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <Nav />
-    <b-container>
-      <router-view/>
-    </b-container>
+    <router-view/>
   </div>
 </template>
 
@@ -15,11 +12,11 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.use(BootstrapVue)
 
-import Nav from './components/partials/Nav.vue';
+
 export default {
   name: 'app',
   components: {
-    Nav
+
   }
 }
 </script>
