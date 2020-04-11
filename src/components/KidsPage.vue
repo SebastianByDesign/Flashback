@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="holder">
     <h4 class=title>Flashback Kids!</h4>
     <b-row>
       <b-col cols="2" align="center" v-for="{ movie_id, movie_cover, movie_title, movie_synopsis, movie_trailer } in movies" :key="movie_id">
@@ -105,5 +105,14 @@ export default {
     .card-body {
       background-color: rgba(0,0,0,0.7);
     }
+    @media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+.container{
+  display: none;
+}
+  }
   }
 </style>
