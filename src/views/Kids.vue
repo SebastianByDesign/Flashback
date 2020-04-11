@@ -1,7 +1,8 @@
 <template>
   <div class="kids">
-    <KidsNav />
     <b-container>
+    <KidsNav />
+    
       <KidsPage />
     </b-container>
   </div>

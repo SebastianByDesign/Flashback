@@ -1,7 +1,7 @@
 <template>
   <div>
     <h4 class=title>Movies</h4>
-    <b-row>
+    <b-row class="brow">
       <b-col cols="2" align="center" v-for="{ movie_id, movie_cover, movie_title, movie_synopsis, movie_trailer } in movies" :key="movie_id">
         <!-- <div class="crop">
           <img :src="'/api/images/' + movie_cover" v-bind:alt="movie_title">
@@ -105,5 +105,17 @@ export default {
     .card-body {
       background-color: rgba(0,0,0,0.7);
     }
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+    
+    .row .brow{
+      display: none;
+      flex-direction: column;
+    }
+}
+
+
   }
 </style>
