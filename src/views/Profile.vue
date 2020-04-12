@@ -3,20 +3,30 @@
         <b-col cols="4" class="leftsplash">
             <b-row>
                 <b-col class="align-self-end">
-                    <img src="images/logo.png">
-                    <h2>Where Movies Meet Music</h2>
+                    <h2>Update Profile</h2>
                     <br>
                     <b-form>
+                      <b-form-group label="First Name" label-for="exampleInputFirst1">
+                          <b-form-input type="text" v-model="logDetails.fname" id="exampleInputFirst1" v-bind:placeholder="user.fname">
+                          </b-form-input>
+                      </b-form-group>
+                      <b-form-group label="Last Name" label-for="exampleInputLast1">
+                          <b-form-input type="text" v-model="logDetails.lname" id="exampleInputLast1" v-bind:placeholder="user.lname">
+                          </b-form-input>
+                      </b-form-group>
+                      <b-form-group label="Email" label-for="exampleInputEmail1">
+                          <b-form-input type="email" v-model="logDetails.email" id="exampleInputEmail1" v-bind:placeholder="user.email">
+                          </b-form-input>
+                      </b-form-group>
                       <b-form-group label="Username" label-for="exampleInputUsername1">
-                          <b-form-input type="text" v-model="logDetails.username" id="exampleInputUsername1" placeholder="Enter username">
+                          <b-form-input type="text" v-model="logDetails.username" id="exampleInputUsername1" v-bind:placeholder="user.username">
                           </b-form-input>
                       </b-form-group>
-
                       <b-form-group label="Password" label-for="exampleInputPassword1">
-                          <b-form-input type="password" v-model="logDetails.password" id="exampleInputPassword1" placeholder="Enter password">
+                          <b-form-input type="password" v-model="logDetails.password" id="exampleInputPassword1" placeholder="Enter new password">
                           </b-form-input>
                       </b-form-group>
-                      <b-button @click="checkLogin(); clearMessage();" variant="primary" class="submit">Submit</b-button>
+                      <b-button @click="updateProfile(); clearMessage();" variant="primary" class="submit">Submit</b-button>
                     </b-form>
                     <br>
                     <div class="alert alert-danger text-center" v-if="errorMessage">
@@ -28,7 +38,6 @@
                       <button type="button" class="close" @click="clearMessage();"><span aria-hidden="true">&times;</span></button>
                       <span class="glyphicon glyphicon-check"></span> {{ successMessage }}
                     </div>
-                    <p>Don't have an account? <router-link :to="{path: 'Signup'}">Sign Up here.</router-link></p>
                 </b-col>
             </b-row>
         </b-col>
@@ -44,30 +53,39 @@
   Vue.use(VueAxios, axios)
 
   export default {
-    name: 'Login',
+    name: 'Profile',
     data: function() {
       return {
+        user: {fname: '', lname: '', username: '', password: '', email: ''},
         successMessage: null,
         errorMessage: null,
-        logDetails: {username: '', password: ''}
+        logDetails: {fname: '', lname: '', username: '', password: '', email: ''}
       }
     },
+    async mounted() {
+      axios.get('/api/user_profile.php').then(
+        response => {
+          this.user = response.data.message;
+        },
+        err => {
+          console.log(err);
+        }
+      )
+    },
     methods: {
-      checkLogin(){
+      updateProfile(){
         var form_data = new FormData();
         for(var key in this.logDetails){
           form_data.append(key, this.logDetails[key]);
         }
-        axios.post('api/user_login.php', form_data)
+        axios.post('api/user_update.php', form_data)
           .then((response) => {
             console.log(response);
-            if(response.data.message.error){
-              console.log(response.data.message.message);
-              this.errorMessage = response.data.message.message;
+            if(response.data.error){
+              this.errorMessage = response.data.message;
             } else {
               this.successMessage = response.data.message.message;
-              this.logDetails = {username: '', password: ''};
-              localStorage.isRestricted = response.data.message.restricted;
+              this.logDetails = {fname: '', lname: '', username: '', password: '', email: ''};
               this.$router.push('/')
             }
           })

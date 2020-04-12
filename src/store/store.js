@@ -5,31 +5,34 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    movies: []
+    isAuthenticated: false
+  },
+
+  // You can use it as a state getter function (probably the best solution)
+  getters: {
+    isAuthenticated () {
+      return vueAuth.isAuthenticated()
+    }
+  },
+
+  // Mutation for when you use it as state property
+  mutations: {
+    isAuthenticated (state, payload) {
+      state.isAuthenticated = payload.isAuthenticated
+    }
   },
 
   actions: {
-    getMovies({commit}) {
-      Vue.axios.get('/api/index').then(
-        response => {
-          //console.log(response);
-          commit('UPDATE_MOVIES', response.data);
-        },
-        err => {
-          console.log(err);
-        }
-      );
-    }
-  },
-  
-  getters: {
-    // Here we will create a getter
-  },
-  
-  mutations: {
-    UPDATE_MOVIES(state, payload) {
-      state.movies = payload;
+
+    // Perform VueAuthenticate login using Vuex actions
+    login (context, payload) {
+
+      vueAuth.login(payload.user, payload.requestOptions).then((response) => {
+        context.commit('isAuthenticated', {
+          isAuthenticated: vueAuth.isAuthenticated()
+        })
+      })
+
     }
   }
-  
 });

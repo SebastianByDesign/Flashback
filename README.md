@@ -1,4 +1,4 @@
-![FlashBack logo](public/images/logo.png)
+![FlashBack logo](images/logo.png)
 ## Roku FlashBack App.
 
 This is CMS streaming project

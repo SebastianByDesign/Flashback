@@ -22,56 +22,38 @@ export default {
 </script>
 
 <style lang="scss">
+
+.kidsSite {
+  background-color: rgb(11, 11, 37);
+
+  .title {
+    color: white;
+  }
+
+  .card {
+    border-radius: 1.5rem;
+  }
+
+  .card-img, .card-img-bottom {
+      border-bottom-right-radius: calc(1.5rem - 1px) !important;
+      border-bottom-left-radius: calc(1.5rem - 1px) !important;
+    }
+
+    .card-img, .card-img-top {
+      border-top-left-radius: calc(1.5rem - 1px) !important;
+      border-top-right-radius: calc(1.5rem - 1px) !important;
+    }
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  height: 100vh;
 
   .container {
     max-width: 1400px;
   }
-    @media only screen 
-  and (min-device-width: 320px) 
-  and (max-device-width: 568px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-
-.splashback .rightsplash{
-  display: none !important;
-}
-
-.leftsplash{
-  flex: none;
-  max-width: none;
-}
-
-.container{
-  display:flex;
-  flex-direction: column;
-}
-// .row{
-
-// margin-top: 2.5vh;
-//     display: flex;
-//     flex-direction: column;
-//     min-width: 2000px;
-//     margin: auto;
-
-// }
-}
-
-@media only screen 
-  and (min-device-width: 768px) 
-  and (max-device-width: 1024px) 
-  and (-webkit-min-device-pixel-ratio: 1) {
-.splashback .rightsplash{
-  display: none !important;
-}
-
-.leftsplash{
-  flex: none;
-  max-width: none;
-}
-}
 }
 </style>

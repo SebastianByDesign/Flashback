@@ -3,7 +3,8 @@
     <b-navbar toggleable="lg" type="dark" variant="dark">
       <b-container>
 
-        <b-navbar-brand href="#">FlashBack</b-navbar-brand>
+        <b-navbar-brand v-if="restricted != 'true'" href="/">FlashBack</b-navbar-brand>
+        <b-navbar-brand v-else href="/">FlashBack <span class="kids">Kids</span></b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -20,14 +21,14 @@
           <!-- Right aligned nav items -->
           <b-navbar-nav class="ml-auto">
 
-            <b-nav-item-dropdown text="Genres" right>
+            <b-nav-item-dropdown v-show="restricted != 'true'" text="Genres" right>
               <div class="row">
                 <b-dropdown-item class="all">
-                  <a v-on:click="showAll()">All</a>
+                  <p v-on:click="showAll()">All</p>
                   <!-- <a>All</a> -->
                 </b-dropdown-item>
                 <b-dropdown-item class="genre" v-for="{ genre_id, genre_name } in genres" :key="genre_id">
-                  <a :class="genre_name" v-on:click="showByGenre(genre_name)">{{ genre_name }}</a>
+                  <p :class="genre_name" v-on:click="showByGenre(genre_name)">{{ genre_name }}</p>
                   <!-- <a :class="genre_name">{{ genre_name }}</a> -->
                 </b-dropdown-item>
               </div>
@@ -41,8 +42,8 @@
               <template v-slot:button-content>
                 <b-icon icon="person-fill"></b-icon>
               </template>
-              <b-dropdown-item href="#">Profile</b-dropdown-item>
-              <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+              <b-dropdown-item v-show="restricted != 'true'" href="/Profile">Profile</b-dropdown-item>
+              <b-dropdown-item @click="logOut();" href="#">Sign Out</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
         </b-collapse>
@@ -66,18 +67,21 @@ Vue.component('BIconPersonFill', BIconPersonFill)
 import { serverBus } from '../../main';
 
 export default {
-  name: 'HelloWorld',
+  name: 'Nav',
   data: function() {
     return {
       genres: null,
-      movies: null
+      movies: null,
+      authenticated: null,
+      restricted: null
     };
   },
   created: function() {
-    Vue.axios.get('/api/admin/movie_genres.php').then(
+    Vue.axios.get('/api/movie_genres.php').then(
       response => {
         //console.log(response);
         this.genres = response.data;
+        this.restricted = localStorage.isRestricted;
       },
       err => {
         console.log(err);
@@ -112,7 +116,7 @@ export default {
 
       dropdown.forEach(function(item){
         item.classList.remove('active');
-      });
+      })
 
       document.querySelector('.all a').classList.remove('active');
       
@@ -126,13 +130,28 @@ export default {
         err => {
           console.log(err);
         }
-      );
+      )
+    },
+    logOut() {
+      Vue.axios.get('/api/user_logout.php')
+      .then((response) => {
+        localStorage.isAuthenticated = response.data;
+        this.$router.push('/LogIn');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     }
-  },
+  }
 }
+
 </script>
 
 <style scoped lang="scss">
+
+.navbarkids {
+  background-color: rgb(8, 99, 204) !important;
+}
 
 .form-control-sm {
   transition: all .3s ease-in-out;
@@ -162,6 +181,10 @@ export default {
 
   li {
     width: 140px;
+
+    p {
+      margin: 0;
+    }
   }
 }
 
