@@ -3,10 +3,6 @@
     <h4 class=title>Movies</h4>
     <b-row>
       <b-col cols="2" align="center" v-for="{ movie_id, movie_cover, movie_title, movie_synopsis, movie_trailer } in movies" :key="movie_id">
-        <!-- <div class="crop">
-          <img :src="'/api/images/' + movie_cover" v-bind:alt="movie_title">
-        </div>
-        <p>{{ movie_title }}<br>{{ movie_year }}</p> -->
         <b-card overlay :title="movie_title" v-bind:img-src="'/api/images/' + movie_cover" v-bind:img-alt="movie_title">
           <b-card-text>
             {{ movie_synopsis }}
@@ -14,7 +10,6 @@
           <b-button v-b-modal="movie_id" variant="primary">
             Watch now
           </b-button>
-
           <b-modal :id="movie_id" :title="movie_title">
             <iframe width="100%" height="315" v-bind:src="movie_trailer" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </b-modal>
@@ -36,28 +31,48 @@ export default {
   name: 'HelloWorld',
   data: function() {
     return {
-      movies: null
+      movies: null,
+      restricted: null
     }
   },
-  created: function() {
+  async mounted() {
+    this.restricted = localStorage.isRestricted;
 
-    Vue.axios.get('/api/index.php').then(
-      response => {
-        //console.log(response);
-        this.movies = response.data;
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    if(this.restricted == 'true') { 
+      document.getElementById('app').classList.add('kidsSite');
+      document.querySelector('.navbar').classList.add('navbarkids');
 
-    serverBus.$on('showByGenre(genre)', (movies) => {
-      this.movies = movies;
-    });
+      Vue.axios.get('/api/index.php?filter=family').then(
+        response => {
+          this.movies = response.data;
+        },
+        err => {
+          console.log(err);
+        }
+      )
+    } else {
 
-    serverBus.$on('showAll()', (movies) => {
-      this.movies = movies;
-    });
+      Vue.axios.get('/api/index.php').then(
+        response => {
+          //console.log(response);
+          this.movies = response.data;
+        },
+        err => {
+          console.log(err);
+        }
+      );
+
+      serverBus.$on('showByGenre(genre)', (movies) => {
+        this.movies = movies;
+      });
+
+      serverBus.$on('showAll()', (movies) => {
+        this.movies = movies;
+      });
+
+    }
+
+
 
   },
   methods: {
@@ -68,8 +83,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+
   .title {
-    padding: 10px 0;
+    padding: 20px 0 0px 0;
+    font-size: 20px;
   }
 
   .row {
@@ -94,12 +111,15 @@ export default {
 
     h4 {
       color: white;
+      font-size: 20px;
     }
 
     p {
       color: white;
       text-align: left;
       font-weight: 600;
+      height: 145px;
+      overflow-y: auto;
     }
 
     .card-body {
