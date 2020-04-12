@@ -15,9 +15,13 @@ Click on the Download button on the github repository and unzip it on your direc
 
 ## Deployment
 Place files within MAMP htdocs folder
+
 Run MAMP server
+
 Open with Visual Studio Code
+
 npm install
+
 npm run serve
 
 ## Built With
